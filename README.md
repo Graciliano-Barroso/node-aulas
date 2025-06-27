@@ -37,3 +37,10 @@ Resultado esperado: a versão instalada do Node, ex: v18.17.1
 npm -v
 ´´´
 Resultado esperado: versão do gerenciador de pacotes npm, ex: 9.8.0
+✅ Se você recebeu os números de versão, está tudo certo!
+
+###📝 4. Criando seu primeiro script
+Vamos criar um script simples que imprime uma mensagem no console.
+
+📁 Etapas:
+Crie uma pasta no seu computador:
