@@ -1,0 +1,4 @@
+meu-projeto/
+│
+├── calculadora.js
+├── index.js

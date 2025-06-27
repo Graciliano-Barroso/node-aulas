@@ -1,0 +1,7 @@
+🛠️ Prática adicional (sem solução nesta aula)
+Desafio: Criar um script que:
+
+Lê um arquivo .txt
+Adiciona uma nova linha com texto de sua escolha
+Adiciona uma nova linha com texto de sua escolha
+Adiciona uma nova linha com texto de sua escolha
