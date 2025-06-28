@@ -402,4 +402,145 @@ Hoje você:
 ---
 ---
 
+# 📘 Aula – Dia 4: Event Loop e Eventos em Node.js
 
+>🎯 Objetivo da Aula
+>
+>Entender o funcionamento do Event Loop, o modelo assíncrono do Node.js, o uso de `setTimeout`, `setInterval`, `Promise`, `async/await` e a criação de eventos com o módulo nativo `events`.
+
+---
+
+## 🌀 1. O que é o Event Loop?
+
+O Event Loop é o mecanismo que permite ao Node.js executar código não bloqueante, mesmo sendo single-threaded (uma única thread de execução).
+
+Como funciona?
+
+- O código é executado de forma síncrona até encontrar uma operação assíncrona (como um `setTimeout` ou uma requisição).
+
+- Essas operações são delegadas e, quando finalizadas, são colocadas de volta na fila para serem processadas.
+
+> 📌 É assim que o Node lida com múltiplas tarefas ao mesmo tempo sem travar.
+
+---
+
+## 🔁 2. Operações assíncronas em Node.js
+
+> ⏱️ `setTimeout`
+ 
+Executa uma função uma vez após um tempo (em milissegundos):
+
+```js
+setTimeout(() => {
+    console.log('Executou após 2 segundos');
+}, 2000);
+```
+
+> 🔁 `setInterval`
+
+Executa uma função repetidamente a cada intervalo de tempo:
+
+```js
+setInterval(() => {
+    console.log('Executa a cada 1 segundo');
+}, 1000);
+```
+
+Use `clearInterval()` para parar.
+
+## ⛓️ 3. Callbacks
+
+Uma callback é uma função passada como argumento para ser executada depois que algo terminar.
+
+```js
+function saudacao(nome, callback) {
+    console.log(`Olá, ${nome}`);
+    callback();
+}
+
+saudacao('Graciliano', () => {
+    console.log('Seja bem-vindo!');
+});
+```
+
+##🔒 4. Promises
+
+Permitem lidar com operações assíncronas de forma mais clara.
+
+```js
+const promessa = new Promise((resolve, reject) => {
+    const sucesso = true;
+    if (sucesso) {
+        resolve("Deu certo!");
+    } else {
+        reject("Deu errado!");
+    }
+});
+
+promessa
+    .then(msg => console.log(msg))
+    .catch(err => console.error(err));
+```
+
+---
+
+## 🔁 5. Async/Await
+
+Sintaxe moderna que facilita o uso de Promises.
+
+```js
+function esperar(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function executar() {
+    console.log("Esperando...");
+    await esperar(2000);
+    console.log("Fim da espera!");
+}
+
+executar();
+```
+
+---
+
+## 📣 6. Módulo `events` – Sistema de Eventos
+
+
+Permite criar e escutar eventos personalizados.
+
+Exemplo básico:
+```js
+const EventEmitter = require('events');
+const meuEmissor = new EventEmitter();
+
+meuEmissor.on('disparar', () => {
+    console.log('O evento "disparar" foi ativado!');
+});
+
+meuEmissor.emit('disparar');
+```
+
+- `on(evento, callback)`: escuta um evento
+
+- `emit(evento)`: dispara um evento
+
+---
+
+### 🛠️ Prática adicional (sem solução nesta aula)
+
+Desafio: Criar um sistema de alarme que dispara eventos com atraso usando `setTimeout` e o módulo `events`.
+
+---
+
+### ✅ Conclusão do Dia 4
+
+Hoje você:
+
+- Entendeu o Event Loop
+
+- Aprendeu sobre callbacks, Promises e async/await
+
+- Usou `setTimeout` e `setInterval`
+
+- Criou eventos personalizados com o módulo `events`
