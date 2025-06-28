@@ -1,4 +1,4 @@
-# 🗂️ **Plano de Estudo de Node.js** (2 semanas)
+# 🗂️ **Plano de Estudo (básico) de Node.js** (2 semanas)
 
 ![imagem do node js!](/assets/images/Nodejs_logo.png)
 
