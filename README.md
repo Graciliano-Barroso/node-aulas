@@ -1,8 +1,16 @@
 # 🗂️ **Plano de Estudo de Node.js** (2 semanas)
 
+![imagem do node js!](/assets/images/Node.js_logo.svg)
+
+# 📄Índice
+
+- [📘 Aula – Dia 1: Introdução ao Node.js e Configuração do Ambiente](#id01)
+
+<br>
+
 > 🎯 Objetivo: Entender como o Node.js funciona, aprender a construir APIs e preparar o terreno para o Nest.js.
 ---
-
+<a name="id01"></a>
 # 📘 Aula – Dia 1: Introdução ao Node.js e Configuração do Ambiente
 
 > 🎯 Objetivo da Aula
