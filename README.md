@@ -1,6 +1,6 @@
 # 🗂️ **Plano de Estudo de Node.js** (2 semanas)
 
-![imagem do node js!](/assets/images/Node.js_logo.svg)
+![imagem do node js!](/assets/images/Nodejs_logo.png)
 
 # 📄Índice
 
