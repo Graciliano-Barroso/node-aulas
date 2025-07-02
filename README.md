@@ -9,13 +9,17 @@
 <br>
 
 > 🎯 Objetivo: Entender como o Node.js funciona, aprender a construir APIs e preparar o terreno para o Nest.js.
+
 ---
+
 <a name="id01"></a>
+
 # 📘 Aula – Dia 1: Introdução ao Node.js e Configuração do Ambiente
 
 > 🎯 Objetivo da Aula
-> 
+>
 > Compreender o que é o Node.js, para que ele serve, como instalá-lo e como criar seus primeiros scripts em JavaScript rodando no terminal.
+
 ---
 
 ## 🧠 1. O que é o Node.js?
@@ -129,6 +133,7 @@ Hoje você:
 - Criou seu primeiro script em Node.js
 
 ---
+
 ---
 
 # 📘 Aula – Dia 2: Módulos Nativos do Node.js
@@ -152,22 +157,22 @@ Permite ler, escrever, alterar e excluir arquivos e pastas.
 #### 📄 Exemplo: leitura de arquivo
 
 ```js
-const fs = require('fs');
+const fs = require("fs");
 
-const conteudo = fs.readFileSync('arquivo.txt', 'utf8');
+const conteudo = fs.readFileSync("arquivo.txt", "utf8");
 console.log(conteudo);
 ```
 
 #### ✍️ Exemplo: escrita em arquivo
 
 ```js
-fs.writeFileSync('novo.txt', 'Conteúdo novo aqui');
+fs.writeFileSync("novo.txt", "Conteúdo novo aqui");
 ```
 
 #### ➕ Exemplo: adicionar conteúdo (append)
 
 ```js
-fs.appendFileSync('novo.txt', '\nNova linha adicionada!');
+fs.appendFileSync("novo.txt", "\nNova linha adicionada!");
 ```
 
 ---
@@ -179,16 +184,17 @@ Permite criar caminhos de forma segura e compatível com qualquer sistema operac
 #### 🔍 Exemplo: uso básico
 
 ```js
-const path = require('path');
+const path = require("path");
 
-const caminho = path.join(__dirname, 'pasta', 'arquivo.txt');
+const caminho = path.join(__dirname, "pasta", "arquivo.txt");
 console.log(caminho);
 ```
 
 - `__dirname`: retorna o diretório atual
 
 - `path.join`: monta o caminho de forma automática e segura
-- 
+-
+
 ---
 
 ## 🧠 4. Módulo `os` – Informações do sistema operacional
@@ -198,12 +204,12 @@ Permite obter informações do sistema atual.
 #### 🖥️ Exemplo:
 
 ```js
-const os = require('os');
+const os = require("os");
 
-console.log('Sistema operacional:', os.platform());
-console.log('CPU(s):', os.cpus().length);
-console.log('Memória livre:', os.freemem());
-console.log('Diretório home:', os.homedir());
+console.log("Sistema operacional:", os.platform());
+console.log("CPU(s):", os.cpus().length);
+console.log("Memória livre:", os.freemem());
+console.log("Diretório home:", os.homedir());
 ```
 
 ---
@@ -215,9 +221,9 @@ Permite acessar dados do processo Node em execução e variáveis de ambiente.
 #### 💡 Exemplo:
 
 ```js
-console.log('PID:', process.pid);
-console.log('Diretório de execução:', process.cwd());
-console.log('Variáveis de ambiente:', process.env);
+console.log("PID:", process.pid);
+console.log("Diretório de execução:", process.cwd());
+console.log("Variáveis de ambiente:", process.env);
 ```
 
 ---
@@ -249,12 +255,13 @@ Hoje você:
 - Interagiu com o processo em execução com `process`
 
 ---
+
 ---
 
 # 📘 Aula – Dia 3: Módulos e Exportações em Node.js
 
 > 🎯 Objetivo da Aula
-> 
+>
 > Aprender como criar e importar módulos em Node.js utilizando `require` e `module.exports`, entendendo o conceito de escopo e como organizar melhor o código em arquivos separados.
 
 ---
@@ -273,7 +280,7 @@ Arquivo: `mensagem.js`
 
 ```js
 function saudacao(nome) {
-    return `Olá, ${nome}!`;
+  return `Olá, ${nome}!`;
 }
 
 module.exports = saudacao;
@@ -288,9 +295,9 @@ module.exports = saudacao;
 Arquivo: `app.js`
 
 ```js
-const saudacao = require('./mensagem');
+const saudacao = require("./mensagem");
 
-console.log(saudacao('Graciliano'));
+console.log(saudacao("Graciliano"));
 ```
 
 > O `require('./mensagem')` importa o módulo criado anteriormente. Use `./` para indicar que está no mesmo diretório.
@@ -305,23 +312,23 @@ Arquivo: `util.js`
 
 ```js
 function soma(a, b) {
-    return a + b;
+  return a + b;
 }
 
 function multiplicar(a, b) {
-    return a * b;
+  return a * b;
 }
 
 module.exports = {
-    soma,
-    multiplicar
+  soma,
+  multiplicar,
 };
 ```
 
 Arquivo: `main.js`
 
 ```js
-const util = require('./util');
+const util = require("./util");
 
 console.log(util.soma(3, 5));
 console.log(util.multiplicar(4, 6));
@@ -337,10 +344,10 @@ Ou seja, variáveis declaradas em um módulo não vazam para fora dele, a menos 
 
 ```js
 // em exemplo.js
-const segredo = 'isso é privado';
+const segredo = "isso é privado";
 
 module.exports = {
-    mensagem: 'isso é público'
+  mensagem: "isso é público",
 };
 ```
 
@@ -400,13 +407,14 @@ Hoje você:
 - Conheceu boas práticas de organização de código
 
 ---
+
 ---
 
 # 📘 Aula – Dia 4: Event Loop e Eventos em Node.js
 
->🎯 Objetivo da Aula
+> 🎯 Objetivo da Aula
 >
->Entender o funcionamento do Event Loop, o modelo assíncrono do Node.js, o uso de `setTimeout`, `setInterval`, `Promise`, `async/await` e a criação de eventos com o módulo nativo `events`.
+> Entender o funcionamento do Event Loop, o modelo assíncrono do Node.js, o uso de `setTimeout`, `setInterval`, `Promise`, `async/await` e a criação de eventos com o módulo nativo `events`.
 
 ---
 
@@ -427,12 +435,12 @@ Como funciona?
 ## 🔁 2. Operações assíncronas em Node.js
 
 > ⏱️ `setTimeout`
- 
+
 Executa uma função uma vez após um tempo (em milissegundos):
 
 ```js
 setTimeout(() => {
-    console.log('Executou após 2 segundos');
+  console.log("Executou após 2 segundos");
 }, 2000);
 ```
 
@@ -442,7 +450,7 @@ Executa uma função repetidamente a cada intervalo de tempo:
 
 ```js
 setInterval(() => {
-    console.log('Executa a cada 1 segundo');
+  console.log("Executa a cada 1 segundo");
 }, 1000);
 ```
 
@@ -454,12 +462,12 @@ Uma callback é uma função passada como argumento para ser executada depois qu
 
 ```js
 function saudacao(nome, callback) {
-    console.log(`Olá, ${nome}`);
-    callback();
+  console.log(`Olá, ${nome}`);
+  callback();
 }
 
-saudacao('Graciliano', () => {
-    console.log('Seja bem-vindo!');
+saudacao("Graciliano", () => {
+  console.log("Seja bem-vindo!");
 });
 ```
 
@@ -469,17 +477,15 @@ Permitem lidar com operações assíncronas de forma mais clara.
 
 ```js
 const promessa = new Promise((resolve, reject) => {
-    const sucesso = true;
-    if (sucesso) {
-        resolve("Deu certo!");
-    } else {
-        reject("Deu errado!");
-    }
+  const sucesso = true;
+  if (sucesso) {
+    resolve("Deu certo!");
+  } else {
+    reject("Deu errado!");
+  }
 });
 
-promessa
-    .then(msg => console.log(msg))
-    .catch(err => console.error(err));
+promessa.then((msg) => console.log(msg)).catch((err) => console.error(err));
 ```
 
 ---
@@ -490,13 +496,13 @@ Sintaxe moderna que facilita o uso de Promises.
 
 ```js
 function esperar(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function executar() {
-    console.log("Esperando...");
-    await esperar(2000);
-    console.log("Fim da espera!");
+  console.log("Esperando...");
+  await esperar(2000);
+  console.log("Fim da espera!");
 }
 
 executar();
@@ -506,19 +512,19 @@ executar();
 
 ## 📣 6. Módulo `events` – Sistema de Eventos
 
-
 Permite criar e escutar eventos personalizados.
 
 Exemplo básico:
+
 ```js
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 const meuEmissor = new EventEmitter();
 
-meuEmissor.on('disparar', () => {
-    console.log('O evento "disparar" foi ativado!');
+meuEmissor.on("disparar", () => {
+  console.log('O evento "disparar" foi ativado!');
 });
 
-meuEmissor.emit('disparar');
+meuEmissor.emit("disparar");
 ```
 
 - `on(evento, callback)`: escuta um evento
@@ -544,3 +550,117 @@ Hoje você:
 - Usou `setTimeout` e `setInterval`
 
 - Criou eventos personalizados com o módulo `events`
+
+---
+
+---
+
+# 📘 Aula – Dia 5: Criando um Servidor HTTP com Node.js
+
+> 🎯 Objetivo da Aula
+>
+> Aprender a criar um servidor básico com o módulo `http` do Node.js, entender o fluxo de requisição/resposta (Request/Response) e implementar rotas simples como `/`, `/about` e `/contact`.
+
+---
+
+## 🌐 1. Introdução ao módulo `http`
+
+O Node.js possui um módulo nativo chamado `http` que permite criar servidores web sem precisar de frameworks externos, como Express.
+
+```js
+const http = require("http");
+```
+
+---
+
+## 🧭 2. Conceito de Requisição e Resposta
+
+Quando um cliente (como um navegador) acessa um site, ele faz uma requisição HTTP (request). O servidor processa e envia de volta uma resposta HTTP (response).
+
+Estrutura:
+
+- Request: contém informações como a URL, método (`GET`, `POST` etc.), cabeçalhos, dados.
+
+- Response: o que o servidor envia de volta: cabeçalhos + conteúdo (HTML, JSON, etc.)
+
+---
+
+## 🛠️ 3. Criando um servidor básico
+
+Exemplo inicial:
+
+```js
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Olá, mundo!");
+});
+
+server.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
+});
+```
+
+> A função `createServer` recebe uma função de callback com os parâmetros `req` (requisição) e `res` (resposta).
+
+---
+
+## 🧭 4. Criando rotas básicas
+
+Podemos usar o caminho da URL para definir diferentes respostas para diferentes páginas.
+
+```js
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Página Inicial");
+  } else if (req.url === "/about") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Sobre Nós");
+  } else if (req.url === "/contact") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Contato");
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Página não encontrada");
+  }
+});
+
+server.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
+});
+```
+---
+
+## ℹ️ 5. Detalhes úteis
+
+- `req.url`: retorna o caminho da URL acessada
+
+- `res.writeHead(statusCode, headers)`: define o status da resposta e os cabeçalhos
+
+- `res.end(conteúdo)`: finaliza e envia a resposta para o cliente
+
+#### 🛠️ Prática adicional (sem solução nesta aula)
+
+Desafio: Criar um servidor Node.js com 3 rotas:
+
+- `/` → Retorna uma mensagem de boas-vindas
+
+`/about` → Retorna uma descrição do site
+
+`/contact` → Retorna um contato ou e-mail fictício
+
+#### ✅ Conclusão do Dia 5
+
+Hoje você:
+
+- Aprendeu a usar o módulo `http`
+
+- Criou um servidor simples em Node.js
+
+- Entendeu como funcionam as requisições e respostas
+
+- Implementou rotas básicas com `if/else`
