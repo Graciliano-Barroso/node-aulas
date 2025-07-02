@@ -112,7 +112,7 @@ Olá, Node.js!
 
 ---
 
-#### 🛠️ Prática adicional (sem solução nesta aula)
+#### 🛠️ Prática adicional
 
 Desafio: Crie um novo script chamado `info.js` que imprima:
 
@@ -193,9 +193,7 @@ console.log(caminho);
 - `__dirname`: retorna o diretório atual
 
 - `path.join`: monta o caminho de forma automática e segura
--
-
----
+- ***
 
 ## 🧠 4. Módulo `os` – Informações do sistema operacional
 
@@ -228,7 +226,7 @@ console.log("Variáveis de ambiente:", process.env);
 
 ---
 
-### 🛠️ Prática adicional (sem solução nesta aula)
+### 🛠️ Prática adicional
 
 Desafio: Criar um script que:
 
@@ -378,7 +376,7 @@ meu-projeto/
 
 ---
 
-### 🛠️ Prática adicional (sem solução nesta aula)
+### 🛠️ Prática adicional
 
 Desafio: Criar um módulo chamado `calculadora.js` com quatro funções:
 
@@ -533,7 +531,7 @@ meuEmissor.emit("disparar");
 
 ---
 
-### 🛠️ Prática adicional (sem solução nesta aula)
+### 🛠️ Prática adicional
 
 Desafio: Criar um sistema de alarme que dispara eventos com atraso usando `setTimeout` e o módulo `events`.
 
@@ -633,6 +631,7 @@ server.listen(3000, () => {
   console.log("Servidor rodando em http://localhost:3000");
 });
 ```
+
 ---
 
 ## ℹ️ 5. Detalhes úteis
@@ -643,7 +642,7 @@ server.listen(3000, () => {
 
 - `res.end(conteúdo)`: finaliza e envia a resposta para o cliente
 
-#### 🛠️ Prática adicional (sem solução nesta aula)
+#### 🛠️ Prática adicional
 
 Desafio: Criar um servidor Node.js com 3 rotas:
 
