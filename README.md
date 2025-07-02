@@ -649,9 +649,9 @@ Desafio: Criar um servidor Node.js com 3 rotas:
 
 - `/` → Retorna uma mensagem de boas-vindas
 
-`/about` → Retorna uma descrição do site
+` /about` → Retorna uma descrição do site
 
-`/contact` → Retorna um contato ou e-mail fictício
+` /contact` → Retorna um contato ou e-mail fictício
 
 #### ✅ Conclusão do Dia 5
 
