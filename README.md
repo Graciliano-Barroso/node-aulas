@@ -663,3 +663,148 @@ Hoje você:
 - Entendeu como funcionam as requisições e respostas
 
 - Implementou rotas básicas com `if/else`
+
+---
+---
+
+## 📘 Aula – Dias 6 e 7: Projeto – API de Tarefas sem Express
+
+> 🎯 Objetivo da Aula
+>
+> Desenvolver uma API REST básica de tarefas usando apenas os módulos nativos do Node.js (http, fs, path), com suporte completo a operações CRUD (Create, Read, Update, Delete) e armazenamento das tarefas em um arquivo .json.
+
+---
+
+## 🔧 1. Tecnologias utilizadas
+
+- `http`: para criar o servidor e tratar as rotas
+
+- `fs`: para ler e escrever no arquivo .json
+
+- `url`: para parsear parâmetros da requisição
+
+- `path`: para garantir caminhos seguros de arquivos
+
+---
+
+## 📁 2. Estrutura do projeto
+
+```kotlin
+projeto-tarefas/
+│
+├── tarefas.json
+├── server.js
+└── utils/
+    └── helpers.js (opcional para funções auxiliares)
+```
+
+---
+
+## 🧩 3. Formato do arquivo tarefas.json
+
+Esse arquivo armazenará as tarefas em formato de array de objetos:
+
+```json
+[
+  {
+    "id": 1,
+    "titulo": "Estudar Node.js",
+    "concluida": false
+  },
+  {
+    "id": 2,
+    "titulo": "Criar API",
+    "concluida": true
+  }
+]
+```
+
+---
+
+## 🧭 4. Rotas esperadas da API
+
+Método HTTP	Rota	Descrição
+
+GET	/tarefas	Lista todas as tarefas
+
+GET	/tarefas/:id	Busca uma tarefa específica
+
+POST	/tarefas	Cria uma nova tarefa
+
+PUT	/tarefas/:id	Atualiza uma tarefa existente
+
+DELETE	/tarefas/:id	Remove uma tarefa
+
+---
+
+## 🧠 5. Lógica principal do servidor
+
+1. Criar o servidor com `http.createServer`
+
+2. Verificar `req.method` e `req.url`
+
+3. Usar `fs.readFileSync` ou `fs.promises` para carregar os dados
+
+4. Usar `fs.writeFileSync` ou `fs.promises` para salvar alterações
+
+5. Responder com `res.writeHead()` e `res.end()`
+
+---
+
+## 📝 6. Observações importantes
+
+🔐 Requisições com corpo (POST e PUT)
+
+Para capturar os dados enviados no corpo da requisição (geralmente JSON), você precisa escutar o evento `data` e `end`:
+
+```js
+let body = "";
+
+req.on("data", (chunk) => {
+  body += chunk.toString();
+});
+
+req.on("end", () => {
+  const data = JSON.parse(body);
+  // Process the data
+});
+```
+
+---
+
+## 🧠 7. Boas práticas e dicas
+
+- Sempre valide os dados antes de salvar no arquivo `.json`.
+
+- Utilize `path.join(__dirname, 'tarefas.json')` para evitar problemas com caminhos.
+
+- Use funções auxiliares para ler e escrever no arquivo (ex: `lerTarefas()`, `salvarTarefas()`).
+
+- Para gerar IDs únicos, use `Date.now()` ou um contador simples (caso não use banco de dados).
+
+- Ao retornar JSON, defina corretamente o cabeçalho:
+
+```js
+res.writeHead(200, { "Content-Type": "application/json" });
+res.end(JSON.stringify(dados));
+```
+
+---
+
+## ✅ Conclusão dos Dias 6 e 7
+
+Hoje você:
+
+- Aprendeu a construir uma API REST sem frameworks
+
+- Utilizou os módulos `http`, `fs`, `url` e `path`
+
+- Entendeu como tratar rotas e métodos HTTP manualmente
+
+- Persistiu dados em um arquivo `.json`
+
+---
+#
+---
+
+
