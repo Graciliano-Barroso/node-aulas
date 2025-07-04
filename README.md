@@ -804,7 +804,6 @@ Hoje você:
 - Persistiu dados em um arquivo `.json`
 
 ---
-#
 ---
 
 
