@@ -665,6 +665,7 @@ Hoje você:
 - Implementou rotas básicas com `if/else`
 
 ---
+
 ---
 
 ## 📘 Aula – Dias 6 e 7: Projeto – API de Tarefas sem Express
@@ -723,13 +724,13 @@ Esse arquivo armazenará as tarefas em formato de array de objetos:
 
 ## 🧭 4. Rotas esperadas da API
 
-| Método HTTP | Rota            | Descrição                          |
-|-------------|-----------------|------------------------------------|
-| GET         | /tarefas        | Lista todas as tarefas             |
-| GET         | /tarefas/:id    | Busca uma tarefa específica        |
-| POST        | /tarefas        | Cria uma nova tarefa               |
-| PUT         | /tarefas/:id    | Atualiza uma tarefa existente      |
-| DELETE      | /tarefas/:id    | Remove uma tarefa                  |
+| Método HTTP | Rota         | Descrição                     |
+| ----------- | ------------ | ----------------------------- |
+| GET         | /tarefas     | Lista todas as tarefas        |
+| GET         | /tarefas/:id | Busca uma tarefa específica   |
+| POST        | /tarefas     | Cria uma nova tarefa          |
+| PUT         | /tarefas/:id | Atualiza uma tarefa existente |
+| DELETE      | /tarefas/:id | Remove uma tarefa             |
 
 ---
 
@@ -800,6 +801,7 @@ Hoje você:
 - Persistiu dados em um arquivo `.json`
 
 ---
+
 ---
 
 # 📘 Aula – Dia 8: Introdução ao Express.js
@@ -866,25 +868,25 @@ api-express/
 ### 📄 Arquivo `index.js
 
 ```js
-const express = require('express');
+const express = require("express");
 const app = express();
 
 app.use(express.json()); // Middleware para ler JSON no corpo da requisição
 
 // Rota GET simples
-app.get('/', (req, res) => {
-    res.send('Bem-vindo à API com Express!');
+app.get("/", (req, res) => {
+  res.send("Bem-vindo à API com Express!");
 });
 
 // Rota POST simples
-app.post('/mensagem', (req, res) => {
-    const { texto } = req.body;
-    res.send(`Mensagem recebida: ${texto}`);
+app.post("/mensagem", (req, res) => {
+  const { texto } = req.body;
+  res.send(`Mensagem recebida: ${texto}`);
 });
 
 // Servidor escutando na porta 3000
 app.listen(3000, () => {
-    console.log('Servidor rodando em http://localhost:3000');
+  console.log("Servidor rodando em http://localhost:3000");
 });
 ```
 
@@ -910,12 +912,12 @@ curl -X POST http://localhost:3000/mensagem -H "Content-Type: application/json" 
 
 ## 🔎 6. Comparando Express com Node puro
 
-| Recurso             | Node puro                 | Express.js                        |
-|---------------------|---------------------------|-----------------------------------|
-| Criar servidor      | `http.createServer(...)`  | `express()`                       |
-| Rotas               | `if/else em req.url`      | `app.get()`, `app.post()`         |
-| Corpo da requisição | Manual com eventos        | `express.json()` middleware       |
-| Organização         | Precisa estruturar tudo   | Já tem padrões e recursos prontos |
+| Recurso             | Node puro                | Express.js                        |
+| ------------------- | ------------------------ | --------------------------------- |
+| Criar servidor      | `http.createServer(...)` | `express()`                       |
+| Rotas               | `if/else em req.url`     | `app.get()`, `app.post()`         |
+| Corpo da requisição | Manual com eventos       | `express.json()` middleware       |
+| Organização         | Precisa estruturar tudo  | Já tem padrões e recursos prontos |
 
 ---
 
@@ -940,6 +942,163 @@ Hoje você:
 - Criou rotas básicas `GET` e `POST`
 
 - Preparou o terreno para refatorar a API de tarefas
+
+---
+
+---
+
+# 📘 Aula – Dia 9: Middlewares e JSON no Express.js
+
+> 🎯 Objetivo da Aula
+>
+> Compreender como o Express processa requisições por meio de middlewares, entender o uso de `app.use()` e `app.json()`, e criar um middleware customizado para registrar informações da requisição.
+
+---
+
+## 🔄 1. O que são Middlewares?
+
+Middlewares são funções intermediárias que recebem os objetos `req`, `res` e `next`, e têm acesso ao fluxo de execução da requisição.
+
+### 📌 Eles servem para:
+
+- Modificar a requisição (`req`) ou resposta (`res`)
+
+- Interromper ou permitir a continuação da execução com `next()`
+
+- Registrar logs, autenticar usuários, validar dados, etc.
+
+---
+
+## 🔗 2. Como o Express processa uma requisição
+
+Quando uma requisição chega no Express:
+
+1. Ela passa pelos middlewares na ordem em que foram definidos com `app.use()` ou diretamente nas rotas.
+
+2. Se um middleware não chamar `next()`, a requisição para ali.
+
+3. Caso contrário, ela segue para o próximo middleware ou rota.
+
+---
+
+## 🧰 3. `express.json()` – Middleware nativo
+
+Esse middleware transforma o corpo da requisição (req.body) em um objeto JavaScript automaticamente (para requisições com Content-Type: application/json).
+
+Exemplo de uso:
+
+```js
+const express = require("express");
+const app = express();
+
+app.use(express.json()); // necessário para usar req.body
+```
+
+Sem isso, o `req.body` será `undefined` ao tentar acessar dados de um `POST` ou `PUT`.
+
+---
+
+## 🧪 4. Criando um middleware customizado
+
+Você pode criar middlewares personalizados com a seguinte estrutura:
+
+```js
+function meuMiddleware(req, res, next) {
+  console.log("Middleware executado!");
+  next(); // chama o próximo middleware ou rota
+}
+```
+
+E aplicar assim:
+
+```js
+app.use(meuMiddleware); // aplicado a todas as rotas
+```
+
+Ou diretamente em uma rota:
+
+```js
+app.get("/rota", meuMiddleware, (req, res) => {
+  res.send("Rota com middleware!");
+});
+```
+
+---
+
+## ⏰ 5. Middleware que registra hora da requisição (conceito)
+
+Objetivo:
+
+Criar um middleware que exiba no terminal a data/hora da requisição recebida.
+
+Lógica:
+
+```js
+function logHora(req, res, next) {
+  const dataHora = new Date().toISOString();
+  console.log(`[${dataHora}] ${req.method} ${req.url}`);
+  next();
+}
+```
+
+---
+
+📄 Exemplo completo com middleware
+
+```js
+const express = require("express");
+const app = express();
+
+app.use(express.json()); // Middleware para ler JSON no corpo da requisição
+
+// Middleware customizado para registrar hora da requisição
+function logHora(req, res, next) {
+  const dataHora = new Date().toISOString();
+  console.log(`[${dataHora}] ${req.method} ${req.url}`);
+  next(); // Chama o próximo middleware ou rota
+}
+
+app.use(logHora); // Middleware para registrar hora da requisição
+
+// Rota GET simples
+app.get("/", (req, res) => {
+  res.send("Bem-vindo à API com Express!");
+});
+
+// Rota POST simples
+app.post("/dados", (req, res) => {
+  res.json({ recebido: req.body });
+});
+
+// Servidor escutando na porta 3000
+app.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
+});
+```
+
+---
+
+## 🛠️ Prática adicional
+
+Desafio: Criar um middleware que:
+
+- Seja aplicado globalmente com app.use()
+
+- Registre a hora exata da requisição
+
+- Mostre também o método HTTP e a rota
+
+---
+
+## ✅ Conclusão do Dia 9
+
+Hoje você:
+
+- Aprendeu o conceito de middlewares no Express
+
+- Utilizou `express.json()` para processar `req.body`
+
+- Criou e aplicou middlewares customizados com `app.use()`
 
 ---
 ---
