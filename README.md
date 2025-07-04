@@ -723,17 +723,13 @@ Esse arquivo armazenará as tarefas em formato de array de objetos:
 
 ## 🧭 4. Rotas esperadas da API
 
-Método HTTP	Rota	Descrição
-
-GET	/tarefas	Lista todas as tarefas
-
-GET	/tarefas/:id	Busca uma tarefa específica
-
-POST	/tarefas	Cria uma nova tarefa
-
-PUT	/tarefas/:id	Atualiza uma tarefa existente
-
-DELETE	/tarefas/:id	Remove uma tarefa
+| Método HTTP | Rota            | Descrição                          |
+|-------------|-----------------|------------------------------------|
+| GET         | /tarefas        | Lista todas as tarefas             |
+| GET         | /tarefas/:id    | Busca uma tarefa específica        |
+| POST        | /tarefas        | Cria uma nova tarefa               |
+| PUT         | /tarefas/:id    | Atualiza uma tarefa existente      |
+| DELETE      | /tarefas/:id    | Remove uma tarefa                  |
 
 ---
 
@@ -802,6 +798,148 @@ Hoje você:
 - Entendeu como tratar rotas e métodos HTTP manualmente
 
 - Persistiu dados em um arquivo `.json`
+
+---
+---
+
+# 📘 Aula – Dia 8: Introdução ao Express.js
+
+> 🎯 Objetivo da Aula
+>
+> Compreender o que é o Express.js, instalar e configurar um projeto básico, e criar rotas GET e POST para uma API simples, preparando o terreno para refatorar a API de tarefas.
+
+---
+
+## 🚀 1. O que é o Express.js?
+
+Express.js é um framework minimalista e flexível para Node.js, que facilita a criação de aplicações web e APIs. Ele abstrai várias complexidades do módulo nativo `http`, permitindo:
+
+- Criação fácil de rotas
+
+- Gerenciamento de middlewares
+
+- Manipulação simplificada de requisições e respostas
+
+- Melhor organização de projetos
+
+---
+
+## 🧰 2. Iniciando um projeto com Express
+
+### 📦 Etapas:
+
+1. Criar a pasta do projeto:
+
+```bash
+mkdir projeto-express
+cd projeto-express
+```
+
+2. Inicializar um novo projeto Node.js:
+
+```bash
+npm init -y
+```
+
+3. Instalar o Express:
+
+```bash
+npm install express
+```
+
+---
+
+## 🗂️ 3. Estrutura básica do projeto
+
+```pgsql
+api-express/
+│
+├── node_modules/
+├── package.json
+└── index.js
+```
+
+---
+
+## 🧪 4. Criando uma API simples com Express
+
+### 📄 Arquivo `index.js
+
+```js
+const express = require('express');
+const app = express();
+
+app.use(express.json()); // Middleware para ler JSON no corpo da requisição
+
+// Rota GET simples
+app.get('/', (req, res) => {
+    res.send('Bem-vindo à API com Express!');
+});
+
+// Rota POST simples
+app.post('/mensagem', (req, res) => {
+    const { texto } = req.body;
+    res.send(`Mensagem recebida: ${texto}`);
+});
+
+// Servidor escutando na porta 3000
+app.listen(3000, () => {
+    console.log('Servidor rodando em http://localhost:3000');
+});
+```
+
+## 🔁 5. Testando com ferramentas
+
+Você pode testar as rotas da API com ferramentas como:
+
+- Postman
+
+- Insomnia
+
+- Ou com o terminal, usando `curl`:
+
+```bash
+curl -X GET http://localhost:3000/
+```
+
+```bash
+curl -X POST http://localhost:3000/mensagem -H "Content-Type: application/json" -d '{"texto": "Olá, Express!"}'
+```
+
+---
+
+## 🔎 6. Comparando Express com Node puro
+
+| Recurso             | Node puro                 | Express.js                        |
+|---------------------|---------------------------|-----------------------------------|
+| Criar servidor      | `http.createServer(...)`  | `express()`                       |
+| Rotas               | `if/else em req.url`      | `app.get()`, `app.post()`         |
+| Corpo da requisição | Manual com eventos        | `express.json()` middleware       |
+| Organização         | Precisa estruturar tudo   | Já tem padrões e recursos prontos |
+
+---
+
+## 🛠️ Prática adicional (descrita, não resolvida)
+
+Desafio: Recriar a API de tarefas usando Express.js:
+
+- Rotas `GET`, `POST`, `PUT`, `DELETE`
+
+- Usar arquivo `.json` para armazenar tarefas (como feito na versão com Node puro)
+
+---
+
+## ✅ Conclusão do Dia 8
+
+Hoje você:
+
+- Conheceu o Express.js e sua proposta
+
+- Instalou e configurou um projeto com Express
+
+- Criou rotas básicas `GET` e `POST`
+
+- Preparou o terreno para refatorar a API de tarefas
 
 ---
 ---
