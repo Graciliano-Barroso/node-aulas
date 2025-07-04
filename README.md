@@ -1101,6 +1101,290 @@ Hoje você:
 - Criou e aplicou middlewares customizados com `app.use()`
 
 ---
+
+---
+
+# 📘 Aula – Dia 10: CRUD Completo com Express.js
+
+> 🎯 Objetivo da Aula
+>
+> Implementar uma API REST completa com as operações CRUD utilizando Express.js. Você aprenderá a criar rotas `GET`, `POST`, `PUT` e `DELETE`, lidar com identificadores únicos (UUID) e armazenar dados em um array em memória ou arquivo `.json`.
+
+---
+
+## 🗂️ 1. Conceito de CRUD
+
+CRUD representa as quatro operações básicas de um sistema de dados:
+
+| Operação | Verbo HTTP | Ação                  |
+| -------- | ---------- | --------------------- |
+| Create   | POST       | Criar uma nova tarefa |
+| Read     | GET        | Ler/listar tarefas    |
+| Update   | PUT        | Atualizar uma tarefa  |
+| Delete   | DELETE     | Remover uma tarefa    |
+
+---
+
+## 🔧 2. Dependência opcional: `uuid`
+
+O módulo `uuid` permite gerar identificadores únicos (ID) para cada tarefa.
+
+Instalação:
+
+```bash
+npm install uuid
+```
+
+Importação:
+
+```js
+const { v4: uuidv4 } = require("uuid");
+```
+
+---
+
+## 📁 3. Estrutura de uma tarefa
+
+Uma tarefa pode seguir a seguinte estrutura:
+
+```js
+{
+  id: 'c4d1b47c-5b84-4b2e-84f5-5f21faba2db3',
+  titulo: 'Estudar Express',
+  concluida: false
+}
+```
+
+---
+
+## 🧪 4. Criando o CRUD com armazenamento em array
+
+```js
+const express = require('express');
+const { v4: uuidv4 } = require('uuid');
+
+const app = express();
+app.use(express.json());
+
+let tarefas = []; // Armazenamento em memória
+
+// [GET] Listar todas as tarefas
+app.get('/tarefas', (req, res) => {
+  res.json(tarefas);
+});
+
+// [GET] Buscar tarefa por ID
+app.get('/tarefas/:id', (req, res) => {
+  const tarefa = tarefas.find(t => t.id === req.params.id);
+  if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+  res.json(tarefa);
+});
+
+// [POST] Criar nova tarefa
+app.post('/tarefas', (req, res) => {
+  const { titulo } = req.body;
+  const novaTarefa = { id: uuidv4(), titulo, concluida: false };
+  tarefas.push(novaTarefa);
+  res.status(201).json(novaTarefa);
+});
+
+// [PUT] Atualizar uma tarefa
+app.put('/tarefas/:id', (req, res) => {
+  const { titulo, concluida } = req.body;
+  const tarefa = tarefas.find(t => t.id === req.params.id);
+  if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+
+  if (titulo !== undefined) tarefa.titulo = titulo;
+  if (concluida !== undefined) tarefa.concluida = concluida;
+
+  res.json(tarefa);
+});
+
+// [DELETE] Remover uma tarefa
+app.delete('/tarefas/:id', (req, res) => {
+  const index = tarefas.findIndex(t => t.id === req.params.id);
+  if (index === -1) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+
+  tarefas.splice(index, 1);
+  res.status(204).send(); // No Content
+});
+
+// Inicia o servidor
+app.listen(3000, () => {
+  console.log('Servidor rodando em http://localhost:3000');
+});
+```
+---
+
+## 📦 5. Armazenamento em arquivo .json (alternativo)
+
+Para persistir dados entre reinicializações, use o módulo `fs` para ler/gravar tarefas em um arquivo `.json`.
+
+Exemplo:
+
+```js
+const fs = require('fs');
+const caminho = './tarefas.json';
+
+// Ler tarefas
+function lerTarefas() {
+  try {
+    const dados = fs.readFileSync(caminho, 'utf-8');
+    return JSON.parse(dados);
+  } catch (err) {
+    return [];
+  }
+}
+
+// Salvar tarefas
+function salvarTarefas(tarefas) {
+  fs.writeFileSync(caminho, JSON.stringify(tarefas, null, 2));
+}
+```
+
+## 📦 6. Armazenamento em arquivo .json (alternativo)(codigo completo)
+
+```js
+const express = require("express");
+const { v4: uuidv4 } = require("uuid");
+const fs = require('fs');
+const caminho = './tarefas.json';
+
+const app = express();
+app.use(express.json());
+
+// Ler tarefas
+function lerTarefas() {
+  try {
+    const dados = fs.readFileSync(caminho, 'utf-8');
+    return JSON.parse(dados);
+  } catch (err) {
+    return [];
+  }
+}
+
+// Salvar tarefas
+function salvarTarefas(tarefas) {
+  fs.writeFileSync(caminho, JSON.stringify(tarefas, null, 2));
+}
+
+// [GET] Listar todas as tarefas
+app.get("/tarefas", (req, res) => {
+  const tarefas = lerTarefas();
+  res.json(tarefas);
+});
+
+// [GET] Buscar tarefa por ID
+app.get("/tarefas/:id", (req, res) => {
+  const tarefas = lerTarefas();
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+  res.json(tarefa);
+});
+
+// [POST] Criar nova tarefa
+app.post("/tarefas", (req, res) => {
+  const { titulo } = req.body;
+  if (!titulo) {
+    return res.status(400).json({ mensagem: "Título é obrigatório" });
+  }
+  const tarefas = lerTarefas();
+  const novaTarefa = { id: uuidv4(), titulo, concluida: false };
+  tarefas.push(novaTarefa);
+  salvarTarefas(tarefas);
+  res.status(201).json(novaTarefa);
+});
+
+// [PUT] Atualizar uma tarefa
+app.put("/tarefas/:id", (req, res) => {
+  const { titulo, concluida } = req.body;
+  const tarefas = lerTarefas();
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+
+  if (titulo !== undefined) tarefa.titulo = titulo;
+  if (concluida !== undefined) tarefa.concluida = concluida;
+
+  salvarTarefas(tarefas);
+  res.json(tarefa);
+});
+
+// [DELETE] Remover uma tarefa
+app.delete("/tarefas/:id", (req, res) => {
+  const tarefas = lerTarefas();
+  const index = tarefas.findIndex((t) => t.id === req.params.id);
+  if (index === -1)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+
+  tarefas.splice(index, 1);
+  salvarTarefas(tarefas);
+  res.status(204).send(); // No Content
+});
+
+// Inicia o servidor
+app.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
+});
+```
+
+---
+
+## 📊 7. Testando com Postman, Insomnia ou curl
+
+Listar tarefas:
+
+```bash
+GET http://localhost:3000/tarefas
+```
+
+Criar tarefa:
+
+```bash
+POST /tarefas
+{
+  "titulo": "Fazer exercícios"
+}
+```
+
+Atualizar tarefa:
+
+```bash
+PUT /tarefas/:id
+{
+  "titulo": "Fazer exercícios",
+  "concluida": true
+}
+```
+
+Excluir tarefa:
+
+```bash
+DELETE /tarefas/:id
+```
+
+---
+
+## 🛠️ Prática adicional (descrita, não resolvida)
+
+Desafio: Finalizar o CRUD com as rotas `PUT` e `DELETE`, utilizando armazenamento em array ou arquivo `.json`.
+
+---
+
+## ✅ Conclusão do Dia 10
+
+Hoje você:
+
+- Aprendeu a criar rotas completas com métodos HTTP (`GET`, `POST`, `PUT`, `DELETE`)
+
+- Gerenciou tarefas com IDs únicos usando `uuid`
+
+- Armazenou dados temporariamente em array e conheceu a alternativa com `.json`
+
+- Criou uma API REST funcional com Express
+
+---
 ---
 
 
