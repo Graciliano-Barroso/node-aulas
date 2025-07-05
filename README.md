@@ -1160,8 +1160,8 @@ Uma tarefa pode seguir a seguinte estrutura:
 ## 🧪 4. Criando o CRUD com armazenamento em array
 
 ```js
-const express = require('express');
-const { v4: uuidv4 } = require('uuid');
+const express = require("express");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 app.use(express.json());
@@ -1169,19 +1169,20 @@ app.use(express.json());
 let tarefas = []; // Armazenamento em memória
 
 // [GET] Listar todas as tarefas
-app.get('/tarefas', (req, res) => {
+app.get("/tarefas", (req, res) => {
   res.json(tarefas);
 });
 
 // [GET] Buscar tarefa por ID
-app.get('/tarefas/:id', (req, res) => {
-  const tarefa = tarefas.find(t => t.id === req.params.id);
-  if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+app.get("/tarefas/:id", (req, res) => {
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
   res.json(tarefa);
 });
 
 // [POST] Criar nova tarefa
-app.post('/tarefas', (req, res) => {
+app.post("/tarefas", (req, res) => {
   const { titulo } = req.body;
   const novaTarefa = { id: uuidv4(), titulo, concluida: false };
   tarefas.push(novaTarefa);
@@ -1189,10 +1190,11 @@ app.post('/tarefas', (req, res) => {
 });
 
 // [PUT] Atualizar uma tarefa
-app.put('/tarefas/:id', (req, res) => {
+app.put("/tarefas/:id", (req, res) => {
   const { titulo, concluida } = req.body;
-  const tarefa = tarefas.find(t => t.id === req.params.id);
-  if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
 
   if (titulo !== undefined) tarefa.titulo = titulo;
   if (concluida !== undefined) tarefa.concluida = concluida;
@@ -1201,9 +1203,10 @@ app.put('/tarefas/:id', (req, res) => {
 });
 
 // [DELETE] Remover uma tarefa
-app.delete('/tarefas/:id', (req, res) => {
-  const index = tarefas.findIndex(t => t.id === req.params.id);
-  if (index === -1) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+app.delete("/tarefas/:id", (req, res) => {
+  const index = tarefas.findIndex((t) => t.id === req.params.id);
+  if (index === -1)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
 
   tarefas.splice(index, 1);
   res.status(204).send(); // No Content
@@ -1211,9 +1214,10 @@ app.delete('/tarefas/:id', (req, res) => {
 
 // Inicia o servidor
 app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
+  console.log("Servidor rodando em http://localhost:3000");
 });
 ```
+
 ---
 
 ## 📦 5. Armazenamento em arquivo .json (alternativo)
@@ -1223,13 +1227,13 @@ Para persistir dados entre reinicializações, use o módulo `fs` para ler/grava
 Exemplo:
 
 ```js
-const fs = require('fs');
-const caminho = './tarefas.json';
+const fs = require("fs");
+const caminho = "./tarefas.json";
 
 // Ler tarefas
 function lerTarefas() {
   try {
-    const dados = fs.readFileSync(caminho, 'utf-8');
+    const dados = fs.readFileSync(caminho, "utf-8");
     return JSON.parse(dados);
   } catch (err) {
     return [];
@@ -1247,8 +1251,8 @@ function salvarTarefas(tarefas) {
 ```js
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
-const fs = require('fs');
-const caminho = './tarefas.json';
+const fs = require("fs");
+const caminho = "./tarefas.json";
 
 const app = express();
 app.use(express.json());
@@ -1256,7 +1260,7 @@ app.use(express.json());
 // Ler tarefas
 function lerTarefas() {
   try {
-    const dados = fs.readFileSync(caminho, 'utf-8');
+    const dados = fs.readFileSync(caminho, "utf-8");
     return JSON.parse(dados);
   } catch (err) {
     return [];
@@ -1385,13 +1389,14 @@ Hoje você:
 - Criou uma API REST funcional com Express
 
 ---
+
 ---
 
 ## 📘 Aula – Dia 11: Trabalhando com Postman
 
->🎯 Objetivo da Aula
+> 🎯 Objetivo da Aula
 >
->Aprender a utilizar o Postman para testar suas APIs Express, enviando requisições `GET`, `POST`, `PUT`, `DELETE` com corpo JSON e analisando as respostas.
+> Aprender a utilizar o Postman para testar suas APIs Express, enviando requisições `GET`, `POST`, `PUT`, `DELETE` com corpo JSON e analisando as respostas.
 
 ---
 
@@ -1547,6 +1552,186 @@ Hoje você:
 - Visualizou e entendeu as respostas da API
 
 ---
+
 ---
 
+# 📘 Aula – Dia 12: Trabalhando com Dados Simulados e Modularização no Express.js
 
+> 🎯 Objetivo da Aula
+>
+> Aprender a organizar o projeto separando rotas e lógica em arquivos distintos, trabalhar com dados simulados em memória, e utilizar a biblioteca `uuid` para gerar IDs únicos para cada recurso (ex: tarefa).
+
+---
+
+## 🧰 1. O que você vai usar hoje
+
+- `express`: framework web
+
+- `uuid`: biblioteca para gerar IDs únicos
+
+- `require()` e `module.exports`: para modularizar
+
+- Organização de código por responsabilidades (rotas, lógica)
+
+---
+
+## 🗂️ 2. Estrutura sugerida do projeto
+
+```plaintext
+api-tarefas/
+│
+├── node_modules/
+├── package.json
+├── server.js              → Ponto de entrada
+├── tarefas/
+│   ├── tarefas.json       → (opcional) dados persistidos
+│   ├── tarefas.routes.js  → rotas da API
+│   └── tarefas.controller.js → lógica de negócio
+└── utils/
+    └── gerarId.js         → função auxiliar (com uuid)
+```
+
+---
+
+## 📦 3. Instalando o uuid
+
+No terminal, execute:
+
+```bash
+npm install uuid
+```
+
+---
+
+## 🔌 4. Criando um gerador de ID
+
+Arquivo: `utils/gerarId.js`
+
+```javascript
+const { v4: uuidv4 } = require("uuid");
+
+function gerarId() {
+  return uuidv4();
+}
+
+module.exports = gerarId;
+```
+
+---
+
+## 🔧 5. Criando as rotas
+
+Arquivo: `tarefas/tarefas.routes.js`
+
+```javascript
+const express = require("express");
+const router = express.Router();
+const controller = require("./tarefas.controller");
+
+// Rotas CRUD
+router.get("/", controller.listar);
+router.get("/:id", controller.buscarPorId);
+router.post("/", controller.criar);
+router.put("/:id", controller.atualizar);
+router.delete("/:id", controller.remover);
+
+module.exports = router;
+```
+
+---
+
+## 🧠 6. Criando o controller
+
+Arquivo: `tarefas/tarefas.controller.js`
+
+```javascript
+const gerarId = require("../utils/gerarId");
+
+let tarefas = []; // Simulação em memória
+
+exports.listar = (req, res) => {
+  res.json(tarefas);
+};
+
+exports.buscarPorId = (req, res) => {
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+  res.json(tarefa);
+};
+
+exports.criar = (req, res) => {
+  const { titulo } = req.body;
+  const nova = { id: gerarId(), titulo, concluida: false };
+  tarefas.push(nova);
+  res.status(201).json(nova);
+};
+
+exports.atualizar = (req, res) => {
+  const { titulo, concluida } = req.body;
+  const tarefa = tarefas.find((t) => t.id === req.params.id);
+  if (!tarefa)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+
+  if (titulo !== undefined) tarefa.titulo = titulo;
+  if (concluida !== undefined) tarefa.concluida = concluida;
+
+  res.json(tarefa);
+};
+
+exports.remover = (req, res) => {
+  const index = tarefas.findIndex((t) => t.id === req.params.id);
+  if (index === -1)
+    return res.status(404).json({ mensagem: "Tarefa não encontrada" });
+
+  tarefas.splice(index, 1);
+  res.status(204).send();
+};
+```
+
+---
+
+## 🚀 7. Ponto de entrada
+
+Arquivo: `server.js`
+
+```javascript
+const express = require("express");
+const app = express();
+const rotasTarefas = require("./tarefas/tarefas.routes");
+
+app.use(express.json());
+
+// Rota base para tarefas
+app.use("/tarefas", rotasTarefas);
+
+app.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
+});
+```
+
+---
+
+## 📊 8. Testando com dados simulados
+
+Como o array `tarefas` está em memória, os dados são reiniciados a cada vez que o servidor é reiniciado.
+
+> 🔁 Ideal para testes iniciais e aprendizado.
+> 💾 Para persistência, substitua o array por leitura/escrita em `.json`.
+
+---
+
+## ✅ Conclusão do Dia 12
+
+Hoje você:
+
+- Instalou e usou o `uuid` para gerar IDs únicos
+
+- Separou as rotas e a lógica (controller) em arquivos diferentes
+
+- Criou uma estrutura modular e escalável
+
+- Trabalhou com dados simulados em memória
+
+---
+---
