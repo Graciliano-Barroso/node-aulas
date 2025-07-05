@@ -1943,3 +1943,142 @@ Hoje você:
 ---
 ---
 
+## 📘 Aula – Dia 14: Ambiente e Ferramentas no Node.js
+
+> 🎯 Objetivo da Aula
+>
+> Aprender a usar ferramentas que melhoram o fluxo de desenvolvimento, como:
+>
+> > - 🌀 `nodemon` para recarregar o servidor automaticamente
+>
+> > - 🔐 `dotenv` para configurar variáveis de ambiente
+>
+> > - 🔧 Preparar o projeto para uso futuro com banco de dados
+
+---
+
+## 🧩 1. Nodemon – reinício automático do servidor
+
+### 🔧 O que é?
+
+`nodemon` reinicia o servidor toda vez que um arquivo `.js` é salvo. Isso elimina a necessidade de parar e rodar o servidor manualmente.
+
+### 📦 Instalação global (opcional):
+
+```bash
+npm install -g nodemon
+```
+
+### 📦 Ou local no projeto:
+
+```bash
+npm install --save-dev nodemon
+```
+
+### 🛠️ Atualize seu `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "nodemon server.js"
+  }
+}
+```
+
+### ▶️ Para rodar o servidor em modo dev:
+
+```bash
+npm run dev
+```
+
+> ✅ Agora, ao editar qualquer arquivo `.js`, o servidor recarrega sozinho!
+
+---
+
+## 🔐 2. Dotenv – Variáveis de ambiente
+
+### 🔧 O que é?
+
+`dotenv` permite criar arquivos `.env` para guardar configurações sensíveis (porta, URLs de banco, tokens).
+
+📦 Instalação:
+
+```bash
+npm install dotenv
+```
+
+### 📄 Crie um arquivo `.env` na raiz:
+
+```bash
+PORT=3000
+DB_URL=mongodb://localhost:27017/minha-api
+```
+
+### 📄 No `server.js`, carregue as variáveis:
+
+```js
+require('dotenv').config(); // No topo do arquivo
+
+const express = require('express');
+const app = express();
+
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+});
+```
+
+> 🔒 Nunca envie seu arquivo .env para o GitHub! Adicione ao .gitignore:
+
+```bash
+.env
+```
+
+---
+
+## 🗂️ 3. Preparar estrutura para banco de dados
+
+Ainda que o projeto use `.json`, podemos preparar para migrar facilmente para banco de dados:
+
+### 🛠️ Criar pasta de configuração de DB (mock):
+
+```bash
+db/
+├── conectar.js
+```
+
+### 📄 Exemplo `db/conectar.js` (MongoDB simulado):
+
+```js
+function conectar() {
+    const url = process.env.DB_URL;
+    console.log(`Conectando ao banco em ${url}...`);
+    // Aqui entraria a lógica com mongoose ou pg (futuro)
+}
+
+module.exports = conectar;
+```
+
+### 📄 Em `server.js`, chamar a conexão:
+
+```js
+const conectar = require('./db/conectar');
+conectar(); // Apenas simulado por enquanto
+```
+
+---
+
+## ✅ Conclusão do Dia 14
+
+Hoje você:
+
+- Instalou e usou o `nodemon` para agilizar o desenvolvimento
+
+- Configurou variáveis de ambiente com `dotenv`
+
+- Começou a estruturar o projeto para futura conexão com banco de dados
+
+---
+___
