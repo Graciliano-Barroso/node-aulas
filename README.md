@@ -1734,4 +1734,212 @@ Hoje você:
 - Trabalhou com dados simulados em memória
 
 ---
+
 ---
+
+# 📘 Aula – Dia 13: Projeto Final com Express – API de Tarefas
+
+> 🎯 Objetivo da Aula
+>
+> Finalizar o projeto da API RESTful de tarefas, contendo todas as rotas (GET, POST, PUT, DELETE) com estrutura modular e armazenamento persistente (em `.json`) ou simulado (em array). Essa é a versão completa do backend com Express.
+
+---
+
+## 🗂️ 1. Estrutura Final do Projeto
+
+```plaintext
+api-tarefas/
+│
+├── node_modules/
+├── package.json
+├── server.js                  ← entrada principal
+├── tarefas/
+│   ├── tarefas.controller.js  ← lógica da aplicação
+│   ├── tarefas.routes.js      ← definição das rotas
+│   ├── tarefas.service.js     ← leitura e escrita em .json
+│   └── tarefas.json           ← armazenamento dos dados
+└── utils/
+    └── gerarId.js             ← geração de UUID
+```
+
+---
+
+##📦 2. Dependências
+
+Instale apenas estas (se ainda não instalou):
+
+```bash
+npm install express uuid
+```
+
+---
+
+## 🧰 3. Módulos Utilitários
+
+📄 `utils/gerarId.js`
+
+```javascript
+const { v4: uuidv4 } = require("uuid");
+
+function gerarId() {
+  return uuidv4();
+}
+
+module.exports = gerarId;
+```
+
+---
+
+## 📚 4. Módulo de persistência (tarefas.service.js)
+
+📄 `tarefas/tarefas.service.js`
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const caminho = path.join(__dirname, 'tarefas.json');
+
+function lerTarefas() {
+    try {
+        const dados = fs.readFileSync(caminho, 'utf-8');
+        return JSON.parse(dados);
+    } catch {
+        return [];
+    }
+}
+
+function salvarTarefas(tarefas) {
+    fs.writeFileSync(caminho, JSON.stringify(tarefas, null, 2));
+}
+
+module.exports = {
+    lerTarefas,
+    salvarTarefas
+};
+```
+
+---
+
+## 🧠 5. Lógica da aplicação (tarefas.controller.js)
+
+📄 `tarefas/tarefas.controller.js`
+
+```javascript
+const { lerTarefas, salvarTarefas } = require('./tarefas.service');
+const gerarId = require('../utils/gerarId');
+
+exports.listar = (req, res) => {
+    const tarefas = lerTarefas();
+    res.json(tarefas);
+};
+
+exports.buscarPorId = (req, res) => {
+    const tarefas = lerTarefas();
+    const tarefa = tarefas.find(t => t.id === req.params.id);
+    if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+    res.json(tarefa);
+};
+
+exports.criar = (req, res) => {
+    const { titulo } = req.body;
+    const tarefas = lerTarefas();
+    const nova = { id: gerarId(), titulo, concluida: false };
+    tarefas.push(nova);
+    salvarTarefas(tarefas);
+    res.status(201).json(nova);
+};
+
+exports.atualizar = (req, res) => {
+    const { titulo, concluida } = req.body;
+    const tarefas = lerTarefas();
+    const tarefa = tarefas.find(t => t.id === req.params.id);
+    if (!tarefa) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+
+    if (titulo !== undefined) tarefa.titulo = titulo;
+    if (concluida !== undefined) tarefa.concluida = concluida;
+
+    salvarTarefas(tarefas);
+    res.json(tarefa);
+};
+
+exports.remover = (req, res) => {
+    let tarefas = lerTarefas();
+    const existe = tarefas.some(t => t.id === req.params.id);
+    if (!existe) return res.status(404).json({ mensagem: 'Tarefa não encontrada' });
+
+    tarefas = tarefas.filter(t => t.id !== req.params.id);
+    salvarTarefas(tarefas);
+    res.status(204).send();
+};
+```
+
+---
+
+## 🔁 6. Definição das rotas (tarefas.routes.js)
+
+📄 `tarefas/tarefas.routes.js`
+
+```javascript
+const express = require('express');
+const router = express.Router();
+const controller = require('./tarefas.controller');
+
+router.get('/', controller.listar);
+router.get('/:id', controller.buscarPorId);
+router.post('/', controller.criar);
+router.put('/:id', controller.atualizar);
+router.delete('/:id', controller.remover);
+
+module.exports = router;
+```
+
+---
+
+## 🚀 7. Ponto de entrada da aplicação (server.js)
+
+📄 `server.js`
+
+```javascript
+const express = require('express');
+const app = express();
+const tarefasRoutes = require('./tarefas/tarefas.routes');
+
+app.use(express.json());
+app.use('/tarefas', tarefasRoutes);
+
+app.listen(3000, () => {
+    console.log('API de tarefas rodando em http://localhost:3000');
+});
+```
+
+## 📝 8. Exemplo de conteúdo inicial (tarefas.json)
+
+📄 `tarefas/tarefas.json`
+
+```json
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "titulo": "Exemplo de tarefa",
+    "concluida": false
+  }
+]
+```
+
+---
+
+## ✅ Conclusão do Dia 13
+
+Hoje você:
+
+- Montou uma API RESTful de tarefas completa
+
+- Modularizou o código separando rotas, controllers e serviços
+
+- Aprendeu a persistir dados em `.json` com `fs`
+
+- Consolidou práticas modernas com Express.js
+
+---
+---
+
