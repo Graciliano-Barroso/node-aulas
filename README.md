@@ -1387,4 +1387,166 @@ Hoje você:
 ---
 ---
 
+## 📘 Aula – Dia 11: Trabalhando com Postman
+
+>🎯 Objetivo da Aula
+>
+>Aprender a utilizar o Postman para testar suas APIs Express, enviando requisições `GET`, `POST`, `PUT`, `DELETE` com corpo JSON e analisando as respostas.
+
+---
+
+## 🧪 1. O que é o Postman?
+
+Postman é uma ferramenta gráfica (GUI) que permite:
+
+- Enviar requisições HTTP para qualquer API
+
+- Ver respostas de forma organizada
+
+- Automatizar testes
+
+- Simular clientes de uma API (navegador, app, frontend etc.)
+
+> 💡 É essencial para qualquer desenvolvedor backend testar endpoints sem precisar construir interfaces visuais.
+
+---
+
+## 🖥️ 2. Instalação do Postman
+
+✅ Opções:
+
+- Site oficial: [https://www.postman.com/downloads](https://www.postman.com/downloads)
+
+- Também disponível como extensão para navegador ou app desktop.
+
+---
+
+## 🔌 3. Testando a API de tarefas
+
+Supondo que sua API Express esteja rodando em:
+
+```bash
+http://localhost:3000
+```
+
+Você pode testar as rotas da seguinte forma:
+
+---
+
+## 📥 4. Enviando uma requisição `GET`
+
+### ✔️ Passos:
+
+1. Abrir Postman
+
+2. Criar nova aba
+
+3. Método: `GET`
+
+4. URL: `http://localhost:3000/tarefas`
+
+5. Clicar em Send
+
+🟢 A resposta deve ser um array de tarefas, caso existam.
+
+---
+
+## 📝 5. Enviando uma requisição `POST` com JSON
+
+### ✔️ Passos:
+
+1. Método: `POST`
+
+2. URL: `http://localhost:3000/tarefas`
+
+3. Vá na aba Body
+
+4. Selecione a opção raw
+
+5. Escolha JSON no menu suspenso
+
+6. Insira o corpo da requisição, por exemplo:
+
+```json
+{
+  "titulo": "Estudar Node.js"
+}
+```
+
+7. Clique em Send
+
+> 🟢 A resposta deve ser o objeto da tarefa recém-criada.
+
+---
+
+## ✏️ 6. Enviando uma requisição `PUT` (edição)
+
+1. Método: `PUT`
+
+2. URL: `http://localhost:3000/tarefas/<id-da-tarefa>`
+
+3. Vá na aba Body → raw → JSON
+
+Corpo de exemplo:
+
+```json
+{
+  "titulo": "Estudar Express.js",
+  "concluida": true
+}
+```
+
+> 🟡 Substitua `<id-da-tarefa>` pelo ID real de uma tarefa existente.
+
+## 🗑️ 7. Enviando uma requisição `DELETE`
+
+1. Método: `DELETE`
+
+2. URL: `http://localhost:3000/tarefas/<id-da-tarefa>`
+
+3. Clique em Send
+
+> 🔴 Isso removerá a tarefa especificada.
+
+---
+
+## 📊 8. Visualizando respostas
+
+Na parte inferior da tela do Postman, você verá:
+
+- ✅ Status HTTP (200, 201, 204, 404, etc.)
+
+- ⏱️ Tempo de resposta
+
+- 📦 Corpo da resposta (em JSON, texto ou HTML)
+
+- 🧾 Cabeçalhos da resposta
+
+---
+
+## 🧠 9. Dicas extras
+
+- Salve suas requisições como coleções para reutilizá-las depois.
+
+- Use variáveis para configurar ambientes (por exemplo: `{{url_base}}`).
+
+- Você pode exportar e compartilhar seus testes com colegas.
+
+---
+
+## ✅ Conclusão do Dia 11
+
+Hoje você:
+
+- Instalou e conheceu a ferramenta Postman
+
+- Enviou requisições `GET`, `POST`, `PUT`, `DELETE`
+
+- Enviou corpo de requisição JSON
+
+- Visualizou e entendeu as respostas da API
+
+---
+---
+
 
